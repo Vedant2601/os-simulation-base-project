@@ -1,0 +1,157 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+    int disk_size;
+    cout << "Enter the size of the disk you want in MB: ";
+    cin >> disk_size;
+    vector<string> disk(disk_size, "");
+    cout << "The Disk of length " << disk_size << " is successfully simulated with each partition of size 1 MB" << endl;
+    int total_blocks = disk_size;
+    int used_blocks = 0;
+
+    int choice = -1;
+    while (choice != 0)
+    {
+        cout << "==++Choice Menu++==" << endl;
+        cout << "1) Creating a File" << endl;
+        cout << "2) Deleting a File" << endl;
+        cout << "3) Renaming a File" << endl;
+        cout << "4) Moving a File" << endl;
+        cout << "5) Print Disk" << endl;
+        cout << "0) Stopping the Simulation" << endl;
+        cout << "===================" << endl;
+        cout << "Enter Choice: ";
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+        {
+            string name;
+            int size;
+            cout << "Enter name of file to be added with extension: ";
+            cin >> name;
+            cout << "Enter size of file in MB: ";
+            cin >> size;
+            int free_blocks = 0;
+            bool enough_space = false;
+            vector<int> free_block_indices;
+            for (int i = 0; i < total_blocks; i++)
+            {
+                if (disk[i] == "")
+                {
+                    free_blocks++;
+                    free_block_indices.push_back(i);
+                    if (free_blocks == size)
+                    {
+                        enough_space = true;
+                        break;
+                    }
+                }
+                else
+                {
+                    free_blocks = 0;
+                    free_block_indices.clear();
+                }
+            }
+            if (enough_space)
+            {
+                for (int i = 0; i < size; i++)
+                {
+                    disk[free_block_indices[i]] = name;
+                }
+                used_blocks += size;
+                cout << "The file has been successfully added." << endl;
+            }
+            else
+            {
+                cout << "The file has not been added because of insufficient space." << endl;
+            }
+            break;
+        }
+        case 2:
+        {
+            string name;
+            cout << "Enter name of file to be removed with extension: ";
+            cin >> name;
+            bool file_found = false;
+            for (int i = 0; i < total_blocks; i++)
+            {
+                if (disk[i] == name)
+                {
+                    file_found = true;
+                    disk[i] = "";
+                    used_blocks--;
+                }
+            }
+            if (file_found)
+            {
+                cout << "The file has been successfully removed." << endl;
+            }
+            else
+            {
+                cout << "The file has not been removed because it doesn't exist." << endl;
+            }
+            break;
+        }
+        case 3:
+        {
+            string old_name, new_name;
+            cout << "Enter old name of file to be renamed with extension: ";
+            cin >> old_name;
+            cout << "Enter new name of file to be renamed with extension: ";
+            cin >> new_name;
+            bool file_found = false;
+            for (int i = 0; i < total_blocks; i++)
+            {
+                if (disk[i] == old_name)
+                {
+                    file_found = true;
+                    disk[i] = new_name;
+                }
+            }
+            if (file_found)
+            {
+                cout << "The file has been successfully renamed." << endl;
+            }
+            else
+            {
+                cout << "The file has not been renamed because it doesn't exist." << endl;
+            }
+            break;
+        }
+        case 4:
+        {
+            string name;
+            cout << "Enter name of file to be deleted with extension: ";
+            cin >> name;
+            bool file_found = false;
+            for (int i = 0; i < total_blocks; i++)
+            {
+                if (disk[i] == name)
+                {
+                    file_found = true;
+                    disk[i] = "";
+                    used_blocks--;
+                }
+            }
+            if (file_found)
+            {
+                cout << "The file has been successfully deleted." << endl;
+            }
+            else
+            {
+                cout << "The file has not been deleted because it doesn't exist." << endl;
+            }
+            break;
+        }
+        }
+    }
+    return 0;
+ }
+ 
+
